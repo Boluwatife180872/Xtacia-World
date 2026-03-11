@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import "@/app/globals.css";
 
 export const metadata: Metadata = {
-  title: "GloryStores - Premium Beauty & Fragrance",
+  title: "Xtacia World - Premium Beauty & Fragrance",
   description:
     "Discover our curated collection of premium cosmetics, hair care, perfumes, and home fragrance diffusers.",
   keywords:
@@ -37,9 +37,9 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Lato:wght@300;400;700&display=swap"
         />
       </head>
-      <body className="font-sans antialiased">
+      <body className="font-sans antialiased flex flex-col min-h-screen">
         <Navigation />
-        {children}
+        <div className="grow">{children}</div>
         <Footer />
         <Toaster />
       </body>

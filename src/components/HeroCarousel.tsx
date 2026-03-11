@@ -93,7 +93,7 @@ export const HeroCarousel = () => {
                   alt={s.imageAlt}
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-black/70" />
+                <div className="absolute inset-0 bg-linear-to-br from-black/70 via-black/40 to-black/70" />
               </div>
               <div className="relative z-10 text-center max-w-2xl">
                 <h2 className="font-serif text-2xl sm:text-3xl md:text-5xl font-bold text-white mb-2 sm:mb-4">{s.title}</h2>
