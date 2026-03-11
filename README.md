@@ -1,4 +1,4 @@
-# 🛒 GloryStores
+# 🛒 Xtacia World
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.0-blue?style=for-the-badge&logo=react)](https://react.dev/)
@@ -6,7 +6,7 @@
 [![Zustand](https://img.shields.io/badge/Zustand-State_Management-764ABC?style=for-the-badge&logo=react)](https://github.com/pmndrs/zustand)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
 
-**GloryStores** is a premium, high-fidelity eCommerce platform specifically designed for luxury cosmetics and lifestyle brands. Built with the cutting-edge **Next.js 16** and **React 19**, it offers a seamless, blazingly fast shopping experience with a focus on sophisticated aesthetics and intuitive UX.
+**Xtacia World** is a premium, high-fidelity eCommerce platform specifically designed for luxury cosmetics and lifestyle brands. Built with the cutting-edge **Next.js 16** and **React 19**, it offers a seamless, blazingly fast shopping experience with a focus on sophisticated aesthetics and intuitive UX.
 
 ---
 
@@ -24,9 +24,9 @@
 
 ## 🎨 Design Philosophy
 
-GloryStores is built with a custom-engineered design system that prioritizes:
+Xtacia World is built with a custom-engineered design system that prioritizes:
 - **Tone**: Elegant, sophisticated, and trustworthy.
-- **Palette**: Warm Cream (`#faf7f2`), Deep Rose (`#8b4956`), and Soft Gold (`#d4af8f`).
+- **Palette**: Warm Cream, Deep Rose, and Soft Gold.
 - **Typography**: Refined serif for headings (Playfair Display) and modern sans-serif for body (Lato).
 
 ---
@@ -146,4 +146,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 For technical issues or feature requests, please open an issue or contact the development team.
 
-Built with ❤️ for **GloryStores**.
+Built with ❤️ for **Xtacia World**.
