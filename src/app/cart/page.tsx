@@ -127,7 +127,7 @@ export default function Cart() {
                 </div>
 
                 <Link href="/checkout">
-                  <Button className="w-full text-sm sm:text-base">
+                  <Button className="w-full text-sm sm:text-base cursor-pointer">
                     Proceed to Checkout
                   </Button>
                 </Link>

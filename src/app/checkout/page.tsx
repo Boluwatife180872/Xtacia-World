@@ -97,7 +97,7 @@ export default function Checkout() {
               </div>
 
               <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-border">
-                <Button type="submit" size="lg" className="w-full text-sm sm:text-base" disabled={isSubmitting}>
+                <Button type="submit" size="lg" className="w-full text-sm sm:text-base cursor-pointer" disabled={isSubmitting}>
                   {isSubmitting ? 'Processing...' : 'Place Order'}
                 </Button>
               </div>
@@ -116,7 +116,7 @@ export default function Checkout() {
                       <p className="font-medium text-foreground truncate">{item.name}</p>
                       <p className="text-foreground/60 text-xs sm:text-sm">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-semibold text-primary flex-shrink-0">₦{(item.price * item.quantity).toLocaleString()}</p>
+                    <p className="font-semibold text-primary shrink-0">₦{(item.price * item.quantity).toLocaleString()}</p>
                   </div>
                 ))}
               </div>

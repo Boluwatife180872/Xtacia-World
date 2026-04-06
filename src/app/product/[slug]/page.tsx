@@ -111,7 +111,7 @@ export default function ProductPage() {
                   <QuantitySelector value={quantity} onChange={setQuantity} max={product.stock} />
                 </div>
 
-                <Button size="lg" onClick={handleAddToCart} className="w-full text-sm sm:text-base">
+                <Button size="lg" onClick={handleAddToCart} className="w-full text-sm sm:text-base cursor-pointer">
                   Add to Cart
                 </Button>
               </div>
