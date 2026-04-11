@@ -1,9 +1,11 @@
 import React from "react";
+import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import "@/app/globals.css";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Xtacia World - Premium Beauty & Fragrance",
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -38,10 +40,14 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased flex flex-col min-h-screen">
-        <Navigation />
-        <div className="grow">{children}</div>
-        <Footer />
-        <Toaster />
+        <ConvexAuthNextjsServerProvider>
+          <Providers>
+            <Navigation />
+            <div className="grow">{children}</div>
+            <Footer />
+            <Toaster />
+          </Providers>
+        </ConvexAuthNextjsServerProvider>
       </body>
     </html>
   );

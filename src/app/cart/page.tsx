@@ -1,16 +1,25 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Trash2, ShoppingCart } from "lucide-react";
 import { useCart } from "@/store/cart";
 import { QuantitySelector } from "@/components/QuantitySelector";
 import { Button } from "@/components/Button";
+import { useConvexAuth } from "convex/react";
 
 export default function Cart() {
+  const router = useRouter();
   const items = useCart((state) => state.items);
   const total = useCart((state) => state.getTotal());
   const removeItem = useCart((state) => state.removeItem);
   const updateQuantity = useCart((state) => state.updateQuantity);
+  const { isAuthenticated, isLoading } = useConvexAuth();
+
+  const handleCheckout = () => {
+    if (isLoading) return;
+    router.push(isAuthenticated ? "/checkout" : "/auth?next=%2Fcheckout");
+  };
 
   return (
     <main className="bg-background py-8 sm:py-12 md:py-16">
@@ -126,11 +135,14 @@ export default function Cart() {
                   <span>₦{total.toLocaleString()}</span>
                 </div>
 
-                <Link href="/checkout">
-                  <Button className="w-full text-sm sm:text-base cursor-pointer">
-                    Proceed to Checkout
-                  </Button>
-                </Link>
+                <Button
+                  type="button"
+                  className="w-full text-sm sm:text-base cursor-pointer"
+                  onClick={handleCheckout}
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Checking account..." : "Proceed to Checkout"}
+                </Button>
 
                 <Link
                   href="/shop"

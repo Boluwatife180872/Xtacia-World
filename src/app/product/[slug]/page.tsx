@@ -3,20 +3,34 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { products } from '@/data/products';
 import { QuantitySelector } from '@/components/QuantitySelector';
 import { Button } from '@/components/Button';
 import { useCart } from '@/store/cart';
+import { useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
 
 export default function ProductPage() {
   const router = useRouter();
   const params = useParams();
   const slugParam = Array.isArray(params?.slug) ? params.slug[0] : params?.slug;
   const normalizedSlug = typeof slugParam === 'string' ? decodeURIComponent(slugParam) : '';
-  const product = products.find((p) => p.slug === normalizedSlug);
+  
+  const product = useQuery(api.products.getBySlug, { slug: normalizedSlug });
+  
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const addItem = useCart((state) => state.addItem);
+
+  if (product === undefined) {
+    return (
+      <main className="bg-background min-h-screen flex items-center justify-center">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="h-10 w-48 bg-accent rounded mb-4"></div>
+          <p className="text-foreground/40">Loading product details...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (!product) {
     return (
@@ -32,7 +46,7 @@ export default function ProductPage() {
 
   const handleAddToCart = () => {
     addItem({
-      id: product.id,
+      id: product._id,
       name: product.name,
       price: product.price,
       quantity,

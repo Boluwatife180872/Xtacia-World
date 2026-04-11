@@ -4,9 +4,11 @@ import { useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/ProductCard";
 import { Input } from "@/components/Input";
-import { products, categories } from "@/data/products";
+import { categories } from "@/data/products";
 import { Suspense } from "react";
 import Loading from "./loading";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 export default function Shop() {
   const searchParams = useSearchParams();
@@ -15,7 +17,10 @@ export default function Shop() {
     searchParams.get("category"),
   );
 
+  const products = useQuery(api.products.list, {});
+
   const filteredProducts = useMemo(() => {
+    if (!products) return [];
     return products.filter((product) => {
       const matchesCategory =
         !selectedCategory || product.category === selectedCategory;
@@ -24,14 +29,37 @@ export default function Shop() {
         .includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [products, selectedCategory, searchQuery]);
+
+  if (products === undefined) {
+    return (
+      <main className="bg-background">
+        <section className="bg-linear-to-r from-primary to-primary/80 text-primary-foreground py-10 sm:py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold mb-1 sm:mb-2">
+              Our Complete Collection
+            </h1>
+            <p className="text-primary-foreground/80 text-sm sm:text-base md:text-lg px-2">
+              Discover our carefully curated selection of premium beauty products
+            </p>
+          </div>
+        </section>
+        <div className="py-20 text-center">
+          <div className="animate-pulse flex flex-col items-center">
+            <div className="h-8 w-64 bg-accent rounded mb-4"></div>
+            <p className="text-foreground/40">Loading your collection...</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="bg-background">
       {/* Header */}
       <section className="bg-linear-to-r from-primary to-primary/80 text-primary-foreground py-10 sm:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold mb-1 sm:mb-2">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold mb-1 sm:mb-2 text-primary-foreground">
             Our Complete Collection
           </h1>
           <p className="text-primary-foreground/80 text-sm sm:text-base md:text-lg px-2">
@@ -120,7 +148,7 @@ export default function Shop() {
                   <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                       {filteredProducts.map((product) => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product._id} product={{ ...product, id: product._id } as any} />
                       ))}
                     </div>
                     <p className="text-foreground/60 text-xs sm:text-sm mt-8 font-medium">

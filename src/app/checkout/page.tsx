@@ -8,20 +8,58 @@ import { useCart } from '@/store/cart';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { checkoutSchema, type CheckoutFormData } from '@/utils/checkout';
+import { useConvexAuth, useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { useEffect } from 'react';
 
 export default function Checkout() {
   const router = useRouter();
   const items = useCart((state) => state.items);
   const total = useCart((state) => state.getTotal());
   const clearCart = useCart((state) => state.clearCart);
+  
+  const createOrder = useMutation(api.orders.create);
+  const user = useQuery(api.users.viewer);
+  const { isAuthenticated, isLoading: isAuthLoading } = useConvexAuth();
 
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
   });
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        fullName: user.name || '',
+        email: user.email || '',
+      });
+    }
+  }, [user, reset]);
+
+  useEffect(() => {
+    if (!isAuthLoading && !isAuthenticated) {
+      router.replace('/auth?next=%2Fcheckout');
+    }
+  }, [isAuthenticated, isAuthLoading, router]);
+
+  if (isAuthLoading) {
+    return (
+      <main className="bg-background min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="font-serif text-4xl font-bold text-primary mb-4">Checkout</h1>
+          <p className="text-foreground/60">Confirming your account...</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   if (items.length === 0) {
     return (
@@ -36,22 +74,42 @@ export default function Checkout() {
   }
 
   const onSubmit = async (data: CheckoutFormData) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const orderData = {
+        items: items.map(item => ({
+          productId: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          image: item.image
+        })),
+        total,
+        status: 'pending',
+        customerDetails: {
+          fullName: data.fullName,
+          email: data.email,
+          phone: data.phone,
+          address: data.address
+        }
+      };
 
-    // Store order data in sessionStorage for the success page
-    const order = {
-      items,
-      customer: data,
-      total,
-      status: 'pending' as const,
-      createdAt: new Date().toISOString(),
-    };
+      await createOrder(orderData);
 
-    sessionStorage.setItem('lastOrder', JSON.stringify(order));
-    clearCart();
-    toast.success('Order placed successfully!');
-    router.push('/success');
+      // Store order data in sessionStorage for the success page
+      const orderForStorage = {
+        ...orderData,
+        customer: data,
+        createdAt: new Date().toISOString(),
+      };
+
+      sessionStorage.setItem('lastOrder', JSON.stringify(orderForStorage));
+      clearCart();
+      toast.success('Order placed successfully!');
+      router.push('/success');
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to place order. Please try again.');
+    }
   };
 
   return (
